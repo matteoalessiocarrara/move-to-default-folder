@@ -38,6 +38,12 @@ then
 	exit 1
 fi
 
+if [ ! -e "$1" ]
+then
+	echo "Il file \"$1\" non esiste"
+	exit 1
+fi
+
 
 handler_not_found=1
 
@@ -48,8 +54,8 @@ do
 	
 	if [ $? -eq 0 ]
 	then
-		
-		mv "$1" $folder
+		echo "OK \"$1\" -> \"$folder\""
+		mv "$1" "$folder"
 
 		handler_not_found=0
 		break
@@ -57,4 +63,5 @@ do
 done
 
 
+[ $handler_not_found -eq 1 ] && echo "Handler non trovato per \"$1\""
 exit $handler_not_found
