@@ -44,10 +44,13 @@ handler_not_found=1
 for handler in $(ls -1 $HANDLERS_DIR)
 do
 
-	$HANDLERS_DIR/$handler $1
+	folder=$($HANDLERS_DIR/$handler "$1")
 	
 	if [ $? -eq 0 ]
 	then
+		
+		mv "$1" $folder
+
 		handler_not_found=0
 		break
 	fi
