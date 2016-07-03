@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+#  Copyright 2016 Matteo Alessio Carrara <sw.matteoac@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+
+# TODO Modalità trovare conflitti fra handler
+
+set -u
+
+HANDLERS_DIR="$HOME/.default-folders"
+
+
+if [ $# -ne 1 ]
+then
+	# XXX Così mostra anche il percorso
+	echo "Uso: $0 file"
+	exit 1
+fi
+
+if [ ! -d $HANDLERS_DIR ]
+then
+	echo "La directory con gli handler ($HANDLERS_DIR) non esiste"
+	exit 1
+fi
+
+
+handler_not_found=1
+
+for handler in $(ls -1 $HANDLERS_DIR)
+do
+
+	$HANDLERS_DIR/$handler $1
+	
+	if [ $? -eq 0 ]
+	then
+		handler_not_found=0
+		break
+	fi
+done
+
+
+exit $handler_not_found
